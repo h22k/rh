@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
 /*
 |--------------------------------------------------------------------------
@@ -15,16 +16,24 @@ use App\Http\Controllers\HomeController;
 */
 
 Route::prefix('/')->group(static function() {
-    //Auth
+    //Redirect login if you are not logged.
     Route::get('/', function () {
        return redirect(\route('login.view'));
     });
-    Route::prefix('/auth')->middleware('guest')->group(static function() {
+    //Auth stuff.
+    Route::prefix('/auth')->group(static function() {
+        //Login
+        Route::prefix('/login')->name('login.')->middleware('guest')->group(static function() {
+            Route::get('/', [LoginController::class, 'show'])
+                ->name('view');
+        });
 
-        Route::get('/login', [LoginController::class, 'show'])
-            ->name('login.view');
+        //Register
+        Route::prefix('/register')->name('register.')->middleware('guest')->group(static function() {
 
-        Route::post('/login', [LoginController::class, '']);
+            Route::get('/', [RegisterController::class, 'show'])->name('view');
+
+        });
 
 
     });

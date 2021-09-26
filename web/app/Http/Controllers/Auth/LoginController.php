@@ -25,12 +25,16 @@ class LoginController extends Controller
 
         $credentials = $request->only(['email', 'password']);
 
-        if (\Auth::attempt($credentials, $request->post('remember_me'))) {
-            return redirect(route('home.index'));
+        if (!\Auth::attempt($credentials, $request->post('remember_me'))) {
+            return \response()->fail([
+                'msg' => 'E-mail or password is wrong! '
+            ]);
         }
 
-        return redirect()->back()->with('alert', 'E-mail or password is wrong.');
-
+        return \response()->success([
+            'msg' => 'You are in.',
+            'user' => auth()->user()
+        ]);
     }
 
 }

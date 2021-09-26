@@ -12,15 +12,17 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $connection = 'pgsql';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var string[]
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
+        'remember_token'
     ];
 
     /**
@@ -41,4 +43,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Setting password attribute for bcrypt
+     *
+     * @param $password
+     */
+    public function setPasswordAttribute($password): void
+    {
+        $this->attributes['password'] = \Hash::make($password);
+    }
 }

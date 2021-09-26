@@ -23,6 +23,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        \Response::macro('success', function (object|array $data, int $statusCode = 200) {
+            return returnSuccess($data, $statusCode);
+        });
+
+        \Response::macro('fail', function (object|array $errorMsg, int $statusCode = 500) {
+           return returnFail($errorMsg, $statusCode);
+        });
     }
 }
