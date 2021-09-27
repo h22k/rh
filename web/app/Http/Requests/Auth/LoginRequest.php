@@ -26,7 +26,6 @@ class LoginRequest extends FormRequest
         return [
             'email' => 'bail|required|email',
             'password' => 'bail|required',
-            'remember_me' => 'bail|boolean'
         ];
     }
 }

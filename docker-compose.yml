@@ -2,6 +2,7 @@ version: "3"
 
 networks:
   laravel:
+    driver: bridge
 
 services:
   nginx:
@@ -19,7 +20,7 @@ services:
       - php
   mysql:
     image: mysql:5.7
-    container_name: mysql-db-server
+    container_name: mysql-h
     restart: unless-stopped
     tty: true
     ports:
@@ -28,7 +29,7 @@ services:
       - ./mysql:/var/lib/mysql
     environment:
       MYSQL_DATABASE: rh
-      MYSQL_USER: remzihoca
+      MYSQL_USER: root
       MYSQL_PASSWORD: remzihoca
       MYSQL_ROOT_PASSWORD: root
       SERVICE_TAGS: dev
@@ -42,9 +43,32 @@ services:
     container_name: php
     depends_on:
       - mysql
+      - pgsql
     volumes:
       - ./web:/var/www/html
     ports:
       - "9000-9000"
     networks:
       - laravel
+  node:
+    build:
+      context: api/
+      dockerfile: node.dockerfile
+    container_name: nodeApi
+    volumes:
+      - ./api:/home/app
+    ports:
+      - "3000:3000"
+    networks:
+      - laravel
+  pgsql:
+    image: postgres
+    restart: always
+    container_name: pgsql
+    environment:
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    networks:
+      - laravel
+

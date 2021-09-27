@@ -20,12 +20,25 @@ window.Vue = require('vue').default;
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('register-component', require('./components/Register.vue').default);
+Vue.component('login-component', require('./components/Login.vue').default);
+Vue.component('home-component', require('./components/Home.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+import { io } from "socket.io-client";
+import VueSweetalert2 from 'vue-sweetalert2';
+import VueSocketio from 'vue-socket.io'
+
+import 'sweetalert2/dist/sweetalert2.min.css';
+Vue.use(VueSweetalert2)
+Vue.use(VueSocketio, io('http://localhost:3000', {
+    withCredentials: true
+}));
+
 
 const app = new Vue({
     el: '#app',

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,11 +24,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+        Model::unguard();
+
         \Response::macro('success', function (object|array $data, int $statusCode = 200) {
             return returnSuccess($data, $statusCode);
         });
 
-        \Response::macro('fail', function (object|array $errorMsg, int $statusCode = 500) {
+        \Response::macro('fail', function (object|array $errorMsg, int $statusCode = 200) {
            return returnFail($errorMsg, $statusCode);
         });
     }

@@ -50,16 +50,19 @@ class Handler extends ExceptionHandler
         return redirect()->guest(route('login.view'));
     }
 
-    public function render($request, Throwable $e)
-    {
-
-        if ($request->is('api/*')) {
-
-            if ($e instanceof ValidationException) {
-                return response()->fail($e->errors(), 200);
-            }
-
-        }
-
-    }
+//    public function render($request, Throwable $e)
+//    {
+//
+//        if ($request->isJson()) {
+//
+//            if ($e instanceof ValidationException) {
+//                return response()->fail($e->errors(), 200);
+//            }
+//
+//            parent::render($request, $e);
+//        }
+//
+//        parent::render($request, $e);
+//
+//    }
 }

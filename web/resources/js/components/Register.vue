@@ -74,8 +74,16 @@ export default {
                 delete this.errors[field]
             }
         },
-        doRegisterToPgsql(user) {
-
+        async doRegisterToPgsql(data) {
+            const userData = data.user
+            try {
+                const response = await nodeAxios.post('/user/create', userData)
+                if (response.status === 200) {
+                    window.location.href = 'http://localhost:8000/auth/login'
+                }
+            } catch (e) {
+                console.log(e)
+            }
         }
     },
     watch: {

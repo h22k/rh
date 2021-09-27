@@ -20,21 +20,50 @@ class LoginController extends Controller
         return response()->view('auth.login');
     }
 
+
     public function login(LoginRequest $request)
+    {
+        $credentials = $request->only(['email', 'password']);
+
+        if (!\Auth::attempt($credentials, true)) {
+            return redirect()->back()->with('alert', 'Email or password wrong!');
+        }
+
+        $response = \Http::post('http://localhost:3000/auth/login', [
+            'email' => auth()->user()->email,
+            'password' => auth()->user()->password
+        ]);
+
+
+
+        $data = $response->json();
+        if ( ! $data['status']) {
+            return redirect()->back()->with('alert', 'Something wrong.');
+        }
+
+        $id = auth()->user()->id;
+        \Cache::set("user-$id", $data['data']['token']);
+
+        session()->flash('alert', 'Welcome! You logged in.');
+        return redirect(route('home.home'));
+    }
+
+    public function checkLogin(LoginRequest $request)
     {
 
         $credentials = $request->only(['email', 'password']);
 
-        if (!\Auth::attempt($credentials, $request->post('remember_me'))) {
+        if (!\Auth::attempt($credentials, true)) {
             return \response()->fail([
                 'msg' => 'E-mail or password is wrong! '
             ]);
         }
 
         return \response()->success([
-            'msg' => 'You are in.',
-            'user' => auth()->user()
+            'msg' => 'You logged in.',
+            'route' => route('login.login')
         ]);
+
     }
 
 }
