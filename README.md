@@ -1,4 +1,4 @@
-#Remzi Hoca firması için case geliştirmesi.
+# Remzi Hoca firması için case geliştirmesi.
 
 ### Detaylar
 
